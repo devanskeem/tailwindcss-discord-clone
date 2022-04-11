@@ -1,4 +1,34 @@
 import image from '../resources/img.jpeg'
+import dateFormat from "dateformat";
+const now = new Date()
+const lastYear = "2021-12-31T01:53:25.739Z";
+const yesterday = "2022-04-10T03:41:25.739Z";
+const lastWeek = "2022-04-08T02:51:25.739Z";
+const aMinuteAgo = "2022-04-11T03:42:29.537Z";
+const formatDate = (date) => {
+    //returns just now or the minutes since if date is less than an hour from now else Today @ h:MM TT
+    if (dateFormat(date, "DDDD") === "Today") {
+        const diff = dateFormat(now, "HMM") - dateFormat(date, "HMM");
+        if (diff < 1) return 'Just now'
+        if (diff < 40) return diff + " minutes ago"
+        if (diff < 100) return diff - 40 + " minutes ago"
+        else return dateFormat(date, "DDDD, h:MM TT")
+    }
+
+    //if within 4 days don't add number date or month
+    const MILLI_IN_DAY = 86400000
+    if (((Date.parse(now) - Date.parse(date)) / MILLI_IN_DAY) < 4){
+        return dateFormat(date, "DDDD, h:MM TT")
+    }
+
+    //if same year don't add day or year
+    if (dateFormat(date, 'yyyy') === dateFormat(now, 'yyyy')) return dateFormat(date, "DDDD, mmmm dS, h:MM TT")
+
+    //if different year don't add day
+    return dateFormat(date, "mmmm dS, yyyy, h:MM TT");
+}
+
+
 
 const Dashboard = () => {
     return(
@@ -13,10 +43,11 @@ const MessageBoard = ({text}) => {
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
                 <div className='flex flex-wrap m-2'>
-                    <Message/>
-                    <Message/>
-                    <Message/>
-                    <Message/>
+                    <Message time={lastYear} user="young_internet"/>
+                    <Message time={lastWeek} user="kangaroo_jack21"/>
+                    <Message time={yesterday} user="stormyAccept1512"/>
+                    <Message time={aMinuteAgo} user="CultureSn@il"/>
+                    <Message time={now} user="random_guy"/>
                 </div>
                 <div className='flex flex-wrap justify-center m-5'>
                     <TextBox/>
@@ -25,9 +56,6 @@ const MessageBoard = ({text}) => {
 
     )
 }
-
-const date = new Date();
-const now = date.toLocaleString()
 
 const Message = ({   time = now,
                      img = image,
@@ -43,7 +71,7 @@ const Message = ({   time = now,
                         {user}
                     </div>
                     <div className='text-gray-500 text-sm '>
-                        {time}
+                        {formatDate(time)}
                     </div>
                     <div className='font-normal'>
                         {message}
