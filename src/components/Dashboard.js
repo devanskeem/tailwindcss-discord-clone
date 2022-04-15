@@ -39,20 +39,20 @@ const Dashboard = () => {
 
 
 const MessageBoard = () => {
-    const [messages, updateMessages] = useState([]);
+    const [messages, setMessages] = useState([]);
     const newMessage = (msg) => {
-        messages.push(msg)
+        setMessages(prev => [...prev, msg])
         console.log(messages)
     }
     const msgList = messages.map((text, index) =>
-        <Message key={index} msg={text}/>
+        <Message key={index} message={text}/>
     )
 
     return(
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
-                <div className='h-full'>
-                    <div className='flex flex-wrap m-2 overflow-auto scroll-auto h-auto'>
+                <div className='h-full scroll-auto overflow-auto'>
+                    <div className='flex flex-wrap m-2 '>
                         {/*<Message/>*/}
                         {/*<Message/>*/}
                         {/*<Message/>*/}
