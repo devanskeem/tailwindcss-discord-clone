@@ -1,8 +1,10 @@
 import image from '../resources/img.jpeg'
 import dateFormat from "dateformat";
-const now = new Date()
+import { faker } from '@faker-js/faker';
+
 
 const formatDate = (date) => {
+    const now = new Date()
     //returns just now or the minutes since if date is less than an hour from now else Today @ h:MM TT
     if (dateFormat(date, "DDDD") === "Today") {
         const diff = dateFormat(now, "HMM") - dateFormat(date, "HMM");
@@ -34,26 +36,19 @@ const Dashboard = () => {
     )
 }
 
-const secondsAgo = Date.parse(now) - 5000;
-const minutesAgo = Date.parse(now) - 1600000;
-const today = Date.parse(now) - 15000000;
-const yesterday = new Date("April 9, 2022 13:24:00");
-const lastWeek = new Date("April 7, 2022 05:12:00");
-const lastMonth = new Date("March 23, 2022 16:43:00");
-const yearsAgo = new Date("December 9, 1998 10:24:00");
 
 const MessageBoard = ({text}) => {
     return(
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
                 <div className='flex flex-wrap m-2 overflow-auto scroll-auto'>
-                    <Message time={yearsAgo} user="young_internet"/>
-                    <Message time={lastMonth} user="kangaroo_jack21"/>
-                    <Message time={lastWeek} user="stormyAccept1512"/>
-                    <Message time={yesterday} user="CultureSn@il"/>
-                    <Message time={today} user="random_guy53"/>
-                    <Message time={minutesAgo} user="si11y_g00se"/>
-                    <Message time={secondsAgo} user="fat_catzzz"/>
+                    <Message/>
+                    <Message/>
+                    <Message/>
+                    <Message/>
+                    <Message/>
+                    <Message/>
+                    <Message/>
                 </div>
                 <div className='flex flex-wrap justify-center m-5 h-16'>
                     <TextBox/>
@@ -63,23 +58,23 @@ const MessageBoard = ({text}) => {
     )
 }
 
-const Message = ({   time = now,
-                     img = image,
-                     user = "username",
-                     message = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam id iste magnam, modi Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam id iste magnam, modi odit quasi sunt unde veritatis voluptas."
+const Message = ({   time = faker.date.recent(),
+                     img = faker.image.avatar(),
+                     user = faker.internet.userName(),
+                     message = faker.lorem.words(Math.random() * 40)
 }) => {
     return(
         <div className="justify-center align-middle m-2 p-2 rounded flex font-sans hover:bg-gray-700 hover:bg-opacity-40 transition-all duration-200 delay-75 ease-linear ">
-            <img src={image} className='w-12 h-12 rounded-full m-2 hover:h-20 hover:w-20 hover:ml-0 cursor-pointer transition-all duration-100' />
+            <img src={img} alt='avatar' className='w-12 h-12 rounded-full m-2 hover:h-20 hover:w-20 hover:ml-0 cursor-pointer transition-all duration-100' />
             <div className="flex-auto">
                 <div className='flex flex-wrap'>
                     <div className='text-purple-500 font-bold w-full'>
                         {user}
                     </div>
-                    <div className='text-gray-500 text-sm '>
+                    <div className='text-gray-500 text-sm w-full '>
                         {formatDate(time)}
                     </div>
-                    <div className='font-normal mr-24'>
+                    <div className='font-normal mr-24 width w-full'>
                         {message}
                     </div>
                 </div>
