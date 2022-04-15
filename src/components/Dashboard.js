@@ -38,25 +38,30 @@ const Dashboard = () => {
 }
 
 
-const MessageBoard = ({text}) => {
+const MessageBoard = () => {
     const [messages, updateMessages] = useState([]);
     const newMessage = (msg) => {
-        updateMessages(arr => [[...arr, msg]])
+        messages.push(msg)
+        console.log(messages)
     }
+    const msgList = messages.map((text, index) =>
+        <Message key={index} msg={text}/>
+    )
 
     return(
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
-                <div className='flex flex-wrap m-2 overflow-auto scroll-auto h-auto >
-                    <Message/>
-                    <Message/>
-                    <Message/>
-                    {messages.map(({ msg, img, user, time, id }) => (
-                        <Message key={id} msg={msg} img={img} user = {user}/>
-                    ))}
+                <div className='h-full'>
+                    <div className='flex flex-wrap m-2 overflow-auto scroll-auto h-auto'>
+                        {/*<Message/>*/}
+                        {/*<Message/>*/}
+                        {/*<Message/>*/}
+                        {msgList}
+
+                    </div>
                 </div>
                 <div className='flex flex-wrap justify-center m-5 h-16'>
-                    <TextBox/>
+                    <TextBox newMessage={newMessage}/>
                 </div>
             </div>
 
@@ -66,14 +71,14 @@ const MessageBoard = ({text}) => {
 const Message = ({   time = faker.date.recent(),
                      img = faker.image.avatar(),
                      user = faker.internet.userName(),
-                     message = faker.lorem.words(Math.random() * 40)
+                     message = faker.lorem.words(Math.random() * 50)
 }) => {
     return(
-        <div className="justify-center align-middle m-2 p-2 rounded flex font-sans hover:bg-gray-700 hover:bg-opacity-40 transition-all duration-200 delay-75 ease-linear ">
+        <div className="justify-center align-middle m-2 p-2 w-full rounded flex font-sans hover:bg-gray-700 hover:bg-opacity-40 transition-all duration-200 delay-75 ease-linear ">
             <img src={img} alt='avatar' className='w-12 h-12 rounded-full m-2 hover:h-20 hover:w-20 hover:ml-0 cursor-pointer transition-all duration-100' />
-            <div className="flex-auto">
+            <div className="flex-auto te">
                 <div className='flex flex-wrap'>
-                    <div className='text-purple-500 font-bold w-full'>
+                    <div className='font-bold w-full' style={{color: faker.internet.color(255, 20,100)}}>
                         {user}
                     </div>
                     <div className='text-gray-500 text-sm w-full '>
@@ -91,22 +96,38 @@ const Message = ({   time = faker.date.recent(),
     )
 }
 
-const TextBox = () => {
-    const [content, setContent] = useState('');
-    const onClick = () => {
+const TextBox = ({newMessage}) => {
+    const [content, setContent] = useState();
+    const [submit, setSubmit] = useState(false)
+    const handleSubmit = e => {
+        e.preventDefault()
         setContent('')
+        if (submit) newMessage(content)
+        setSubmit(false)
+
+    }
+    const handleChange = e => {
+        setContent(e.target.value)
+        if (content === '') setSubmit(false)
+        else setSubmit(true)
     }
 
     return(
-        // <textarea type="textarea" className='break-words p-1 bg-gray-600 w-full h-fit focus: outline-none'/>
+        <form onSubmit={handleSubmit}
+              className=" bg-gray-700 text-gray-500 w-full flex justify-between align-middle
+                           focus:text-gray-100 border-solid border-white border-0 focus:outline-none focus:border-[1px]
+                           max-h-full resize-none overflow-auto">
+            <textarea className='bg-gray-700 outline-none resize-none overflow-auto w-full focus:text-gray-100'
+                value={content}
+                onChange={handleChange}
+                placeholder="Send a message"
+            >
+            </textarea>
 
-        <span
-            className="bg-gray-700 text-gray-500 resize-y overflow-hidden w-full focus:text-gray-300 outline-[1em] focus:outline-gray-50
-                       focus:before:"
-            role="textbox"
-            contentEditable>{content == ''? 'SEND A MESSAGE' : content
-            }
-        </span>
+            <button type="submit" className={submit ? 'cursor-pointer font-bold p-2 text-blue-400 bg-gray-600 hover:bg-blue-400 hover:text-gray-700 transition-all active:bg-blue-500' : 'pointer-events-none p-2 font-bold'}>
+                Send
+                </button>
+        </form>
 
 
     )
