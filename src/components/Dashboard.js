@@ -1,6 +1,7 @@
 import image from '../resources/img.jpeg'
 import dateFormat from "dateformat";
 import { faker } from '@faker-js/faker';
+import {useState} from "react";
 
 
 const formatDate = (date) => {
@@ -38,17 +39,21 @@ const Dashboard = () => {
 
 
 const MessageBoard = ({text}) => {
+    const [messages, updateMessages] = useState([]);
+    const newMessage = (msg) => {
+        updateMessages(arr => [[...arr, msg]])
+    }
+
     return(
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
-                <div className='flex flex-wrap m-2 overflow-auto scroll-auto'>
+                <div className='flex flex-wrap m-2 overflow-auto scroll-auto h-auto >
                     <Message/>
                     <Message/>
                     <Message/>
-                    <Message/>
-                    <Message/>
-                    <Message/>
-                    <Message/>
+                    {messages.map(({ msg, img, user, time, id }) => (
+                        <Message key={id} msg={msg} img={img} user = {user}/>
+                    ))}
                 </div>
                 <div className='flex flex-wrap justify-center m-5 h-16'>
                     <TextBox/>
@@ -87,15 +92,20 @@ const Message = ({   time = faker.date.recent(),
 }
 
 const TextBox = () => {
+    const [content, setContent] = useState('');
+    const onClick = () => {
+        setContent('')
+    }
+
     return(
         // <textarea type="textarea" className='break-words p-1 bg-gray-600 w-full h-fit focus: outline-none'/>
 
         <span
-            className="bg-gray-700 text-gray-500 resize-y overflow-hidden w-full focus:text-gray-300 focus:outline-none
-                       focus:content-['']"
+            className="bg-gray-700 text-gray-500 resize-y overflow-hidden w-full focus:text-gray-300 outline-[1em] focus:outline-gray-50
+                       focus:before:"
             role="textbox"
-
-            contentEditable>Send a message
+            contentEditable>{content == ''? 'SEND A MESSAGE' : content
+            }
         </span>
 
 
