@@ -44,20 +44,16 @@ const MessageBoard = () => {
         setMessages(prev => [...prev, msg])
         console.log(messages)
     }
-    const msgList = messages.map((text, index) =>
-        <Message key={index} message={text}/>
+    const msgList = messages.map((msg, index) =>
+        <Message key={index} message={msg.text} time={msg.time} img={msg.img} user={msg.user}/>
     )
 
     return(
 
             <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
                 <div className='h-full scroll-auto overflow-auto'>
-                    <div className='flex flex-wrap m-2 '>
-                        {/*<Message/>*/}
-                        {/*<Message/>*/}
-                        {/*<Message/>*/}
+                    <div className='flex flex-wrap m-2 '>              
                         {msgList}
-
                     </div>
                 </div>
                 <div className='flex flex-wrap justify-center m-5 h-16'>
@@ -68,10 +64,10 @@ const MessageBoard = () => {
     )
 }
 
-const Message = ({   time = faker.date.recent(),
-                     img = faker.image.avatar(),
-                     user = faker.internet.userName(),
-                     message = faker.lorem.words(Math.random() * 50)
+const Message = ({   time,
+                     img,
+                     user,
+                     message
 }) => {
     return(
         <div className="justify-center align-middle m-2 p-2 w-full rounded flex font-sans hover:bg-gray-700 hover:bg-opacity-40 transition-all duration-200 delay-75 ease-linear ">
@@ -102,7 +98,10 @@ const TextBox = ({newMessage}) => {
     const handleSubmit = e => {
         e.preventDefault()
         setContent('')
-        if (submit) newMessage(content)
+        if (submit) newMessage({text: content,
+                                time: new Date(),
+                                img: faker.image.avatar(),
+                                user: faker.internet.userName()})
         setSubmit(false)
 
     }
@@ -123,10 +122,10 @@ const TextBox = ({newMessage}) => {
                 placeholder="Send a message"
             >
             </textarea>
-
             <button type="submit" className={submit ? 'cursor-pointer font-bold p-2 text-blue-400 bg-gray-600 hover:bg-blue-400 hover:text-gray-700 transition-all active:bg-blue-500' : 'pointer-events-none p-2 font-bold'}>
                 Send
-                </button>
+            </button>
+
         </form>
 
 
