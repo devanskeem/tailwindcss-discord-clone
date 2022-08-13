@@ -1,4 +1,3 @@
-
 import MessageBoard from "./MessageBoard";
 
 const Dashboard = () => {
