@@ -15,7 +15,7 @@ const MessageBoard = () => {
 
     return(
 
-            <div className="flex flex-col align-middle justify-between bg-gray-800 w-full h-screen shadow">
+            <div className="flex flex-col align-middle justify-between bg-gray-700 w-full h-screen shadow">
                 <div className='h-full scroll-auto overflow-auto'>
                     <div className='flex flex-wrap m-2 '>              
                         {msgList}
